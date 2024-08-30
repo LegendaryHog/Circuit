@@ -11,17 +11,27 @@ using str_citr = typename std::string::const_iterator;
 
 unsigned scan_unsigned(str_citr& itr)
 {
+    unsigned val = 0;
+    try {
     std::size_t pos = 0;
-    auto val = static_cast<unsigned>(std::stoi(std::to_address(itr), &pos));
+    val = static_cast<unsigned>(std::stoi(std::to_address(itr), &pos));
     itr += pos;
+    } catch(...) {
+        throw std::logic_error{"invalid input"};
+    }
     return val;
 }
 
 double scan_double(str_citr& itr)
 {
+    double val = 0.0;
+    try {
     std::size_t pos = 0;
-    auto val = static_cast<double>(std::stod(std::to_address(itr), &pos));
+    val = static_cast<double>(std::stod(std::to_address(itr), &pos));
     itr += pos;
+    } catch(...) {
+        throw std::logic_error{"inavlid input"};
+    }
     return val;
 }
 
@@ -52,12 +62,12 @@ InputEdge scan_edge(const std::string& str)
 
     itr = skip_to_unsigned(itr, str.cend());
     if (itr == str.cend())
-        throw std::logic_error{"invalid input of node2"};
+        throw std::logic_error{"invalid input"};
     node2 = scan_unsigned(itr);
 
     itr = skip_to_signed(itr, str.cend());
     if (itr == str.cend())
-        throw std::logic_error{"invalid input of resistance"};    
+        throw std::logic_error{"invalid input"};    
     res = scan_double(itr);
     if (res < 0.0)
         throw std::logic_error{"you cannot input negative resistance"};
@@ -74,7 +84,11 @@ Container::Vector<InputEdge> input()
     Container::Vector<InputEdge> edges {};
     std::string str {};
     while (std::getline(std::cin, str))
+    {
+        if (str.empty())
+            break;
         edges.push_back(scan_edge(str));
+    }
     return edges;
 }
 
