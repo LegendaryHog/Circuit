@@ -2,6 +2,7 @@
 
 #include "matrix_slae.hpp"
 #include "circuit.hpp"
+#include "input_output.hpp"
 
 struct DblCmp
 {
@@ -328,6 +329,37 @@ TEST(Circuit, solve_circuitMultiEdgeCase)
     EXPECT_TRUE(dbl_cmp(solution3[3].second, 2.14286));
     EXPECT_TRUE(dbl_cmp(solution3[4].second, 0.714286));
 }
+
+bool input_edge_cmp(const Circuit::InputOutput::InputEdge& e1, const Circuit::InputOutput::InputEdge& e2)
+{
+    if (e1.node1_ != e2.node1_)
+        return false;
+    if (e1.node2_ != e2.node2_)
+        return false;
+    if (!dbl_cmp(e1.emf_, e2.emf_))
+        return false;
+    if (!dbl_cmp(e2.resistance_, e2.resistance_))
+        return false;
+    return true;
+}
+
+
+TEST(Circuit, input)
+{
+    std::istringstream is1 ("1 -- 2, 4.0;\n1 -- 3, 10.0;\n1 -- 4, 2.0; -12.0V\n2 -- 3, 60.0;\n2 -- 4, 22.0;\n3 -- 4, 5.0;\n");
+    auto edges1 = Circuit::InputOutput::input(is1);
+    Container::Vector<Circuit::InputOutput::InputEdge> edges1_res = {
+        {1, 2, 4.0},
+        {1, 3, 10.0},
+        {1, 4, 2.0, -12.0},
+        {2, 3, 60.0},
+        {2, 4, 22.0},
+        {3, 4, 5.0}
+    };
+
+    EXPECT_TRUE(std::equal(edges1.cbegin(), edges1.cend(), edges1_res.cbegin(), input_edge_cmp));
+}
+
 
 int main(int argc, char** argv)
 {

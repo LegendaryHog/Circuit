@@ -12,26 +12,26 @@ using str_citr = typename std::string::const_iterator;
 unsigned scan_unsigned(str_citr& itr)
 {
     unsigned val = 0;
-    try {
     std::size_t pos = 0;
+    try {
     val = static_cast<unsigned>(std::stoi(std::to_address(itr), &pos));
-    itr += pos;
     } catch(...) {
         throw std::logic_error{"invalid input"};
     }
+    itr += pos;
     return val;
 }
 
 double scan_double(str_citr& itr)
 {
     double val = 0.0;
-    try {
     std::size_t pos = 0;
+    try {
     val = static_cast<double>(std::stod(std::to_address(itr), &pos));
-    itr += pos;
     } catch(...) {
         throw std::logic_error{"inavlid input"};
     }
+    itr += pos;
     return val;
 }
 
@@ -79,11 +79,11 @@ InputEdge scan_edge(const std::string& str)
     return InputEdge{node1, node2, res, emf};
 }
 
-Container::Vector<InputEdge> input()
+Container::Vector<InputEdge> input(std::istream& istream)
 {
     Container::Vector<InputEdge> edges {};
     std::string str {};
-    while (std::getline(std::cin, str))
+    while (std::getline(istream, str))
     {
         if (str.empty())
             break;

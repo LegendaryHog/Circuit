@@ -11,7 +11,7 @@ struct InputEdge
 {
     unsigned node1_ = 0, node2_ = 0;
     double resistance_ = 0.0, emf_ = 0.0;
-}; // struct IOEdge
+}; // struct InputEgde
 } // namespace InputOutput
 
 struct Edge : private InputOutput::InputEdge

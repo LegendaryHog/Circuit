@@ -4,7 +4,7 @@
 int main()
 {
     try {
-    auto edges = Circuit::InputOutput::input();
+    auto edges = Circuit::InputOutput::input(std::cin);
     Circuit::Circuit circuit (edges.cbegin(), edges.cend());
     auto solution = circuit.solve_circuit();
     Circuit::InputOutput::output(solution.cbegin(), solution.cend());
